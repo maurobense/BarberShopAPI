@@ -296,6 +296,7 @@
     <Compile Include="Models\Booking.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Dto\BarberDto.cs" />
+    <Compile Include="Models\Dto\TurnDto.cs" />
     <Compile Include="Models\TurnBarber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

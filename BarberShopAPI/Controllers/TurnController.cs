@@ -47,5 +47,43 @@ namespace BarberShopAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Error");
             }
         }
+        [HttpGet]
+        public HttpResponseMessage Get(int idBarber, DateTime day)
+        {
+            try
+            {
+                using(var context = new BarberShopContext())
+                {
+                    var turns = context.TurnBarber.Where(t => t.IdBarber == idBarber && t.Date.Year == day.Year && t.Date.Day == day.Day && t.Date.Month == day.Month && t.Reserved == 0 && t.Active == 1).ToList();
+                    var myTurns = new List<TurnDto>();
+                    if (turns.Count > 0) {
+                        foreach (var t in turns)
+                        {
+                            myTurns.Add(new TurnDto
+                            {
+                                IdTurn = t.IdTurn,
+                                IdBarber = t.IdBarber,
+                                Active = t.Active,
+                                Reserved = t.Reserved,
+                                Date = t.Date,
+                                To = t.To
+
+                            });
+                        }
+                        var turnsJson = JsonSerializer.Serialize(myTurns);
+                        return Request.CreateResponse(HttpStatusCode.OK, turnsJson);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NoContent, "Este barbero no tiene turnos disponibles en esta fecha");
+                    }
+                }
+                
+            }
+            catch(Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Error");
+            }
+        }
     }
 }
