@@ -8,9 +8,11 @@ using System.Web.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BarberShopAPI.Models.Dto;
+using BarberShopAPI.Security;
 
 namespace BarberShopAPI.Controllers
 {
+    [AuthHandler]
     public class BarbersController : ApiController
     {
         [HttpGet]

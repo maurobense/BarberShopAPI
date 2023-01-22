@@ -24,6 +24,7 @@ namespace BarberShopAPI.Models
         public virtual DbSet<BarberShop> BarberShop { get; set; }
         public virtual DbSet<Booking> Booking { get; set; }
         public virtual DbSet<Client> Client { get; set; }
+        public virtual DbSet<Tokens> Tokens { get; set; }
         public virtual DbSet<TurnBarber> TurnBarber { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,7 +32,7 @@ namespace BarberShopAPI.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Server=DESKTOP-37NE6PH\SQLEXPRESS; Database=BarberShop; Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=BarberShop;Trusted_Connection=True;");
             }
         }
 
@@ -185,6 +186,23 @@ namespace BarberShopAPI.Models
                 entity.Property(e => e.Username)
                     .IsRequired()
                     .HasMaxLength(15)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Tokens>(entity =>
+            {
+                entity.HasKey(e => e.IdToken)
+                    .HasName("PK__Tokens__D6332447C5E9BFB3");
+
+                entity.HasIndex(e => e.Token)
+                    .HasName("UQ__Tokens__1EB4F817A27412B8")
+                    .IsUnique();
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Token)
+                    .IsRequired()
+                    .HasMaxLength(200)
                     .IsUnicode(false);
             });
 

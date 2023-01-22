@@ -12,6 +12,7 @@ namespace BarberShopAPI.Models
         public Barber()
         {
             BarberBarberShop = new HashSet<BarberBarberShop>();
+            TurnBarber = new HashSet<TurnBarber>();
         }
 
         public int IdBarber { get; set; }
