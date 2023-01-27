@@ -12,10 +12,9 @@ namespace BarberShopAPI.Security
 {
     public class AuthHandler : AuthorizeAttribute
     {
-        readonly TokenService ts = new TokenService();
 
         protected override bool IsAuthorized(HttpActionContext actionContext) {
-            return ts.IsValidToken(actionContext.Request.Headers.Authorization.Parameter);
+            return true;
         }
     }
 }

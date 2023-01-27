@@ -6,6 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using BarberShopAPI.Security;
+using BarberShopAPI.Models.Dto;
+using Newtonsoft.Json;
+
 
 namespace BarberShopAPI.Controllers
 {
@@ -19,23 +23,33 @@ namespace BarberShopAPI.Controllers
                 using (var context = new BarberShopContext()) {
                     UserService us = new UserService();
                     var ret = us.IsUser(username, password);
-                    var myToken = Guid.NewGuid();
+                    var token = "";
                   
                     
                     if (ret)
                     {
-                        Tokens tk = new Tokens();
-                        tk.Token = myToken.ToString();
-                        tk.CreationDate = DateTime.Now;
                         var client = context.Client.FirstOrDefault(c => c.Username == username);
                         var barberShop = context.BarberShop.FirstOrDefault(c => c.UserName == username);
                         var barber = context.Barber.FirstOrDefault(c => c.UserName == username);
-                        if (client != null) { tk.User = client.IdClient; }
-                        else if (barber != null) { tk.User = barber.IdBarber; }
-                        else { tk.User = barberShop.IdBarber; }
-                        context.Tokens.Add(tk);
-                        context.SaveChanges();
-                        return Request.CreateResponse(HttpStatusCode.OK, myToken);
+                        if (barber != null) {
+                            token = TokenHandler.GenerateToken(JsonConvert.SerializeObject(new UserDto
+                            {
+                                IdUser = barber.IdBarber,
+                                UserName = barber.UserName
+                            }));
+                        }
+                        else {
+                            token = TokenHandler.GenerateToken(JsonConvert.SerializeObject(new UserDto
+                            {
+                                IdUser = barberShop.IdBarber,
+                                UserName = barberShop.UserName
+                            }));
+
+                        }
+                        var decodedJWT = TokenHandler.DecodeToken(token);
+
+
+                        return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.DeserializeObject<UserDto>(decodedJWT));
                     }
                     else
                     {

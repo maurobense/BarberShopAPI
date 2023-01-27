@@ -372,13 +372,13 @@
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Dto\BarberDto.cs" />
     <Compile Include="Models\Dto\TurnDto.cs" />
+    <Compile Include="Models\Dto\UserDto.cs" />
     <Compile Include="Models\Tokens.cs" />
     <Compile Include="Models\TurnBarber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthHandler.cs" />
-    <Compile Include="Services\ITokenService.cs" />
+    <Compile Include="Security\TokenHandler.cs" />
     <Compile Include="Services\IUserService.cs" />
-    <Compile Include="Services\TokenService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
